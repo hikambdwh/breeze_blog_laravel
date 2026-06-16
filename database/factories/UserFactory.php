@@ -26,7 +26,7 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'username' => fake()->unique()->userName(),
+            'username' => fake()->userName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
@@ -41,6 +41,12 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+    public function is_admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_admin' => true,
         ]);
     }
 }
