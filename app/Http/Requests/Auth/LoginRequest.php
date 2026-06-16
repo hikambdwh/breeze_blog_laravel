@@ -15,6 +15,8 @@ class LoginRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
+
+    protected $user_type;
     public function authorize(): bool
     {
         return true;
@@ -28,9 +30,17 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'user_cred' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {   
+        $this->user_type = (filter_var($this->input('user_cred'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username');
+        $this->merge([
+            $this->user_type => $this->input('user_cred'),
+        ]);
     }
 
     /**
@@ -42,11 +52,11 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (! Auth::attempt($this->only($this->user_type, 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'user_cred' => trans('auth.failed'),
             ]);
         }
 
@@ -81,6 +91,8 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->input('user_cred')).'|'.$this->ip());
     }
+
+    
 }
