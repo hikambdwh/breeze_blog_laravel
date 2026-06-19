@@ -47,7 +47,7 @@ Route::get('/blog/{post:slug}', function (Post $post) {
     return view('artikel', ['title' => 'Artikel', 'post' => $post]);
 });
 
-Route::get('/dashboard',[BlogDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [BlogDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BlogDashboardController extends Controller
 {
@@ -12,7 +13,11 @@ class BlogDashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard', ['posts' => Post::all()]);
+        $posts = Post::latest()->where('author_id', '=', Auth::user()->id)->filter(request(['search']))->paginate(10)->withQueryString();
+
+        $count = Post::where('author_id', '=', Auth::user()->id)->count();
+
+        return view('dashboard', ['posts' => $posts, 'count' => $count]);
     }
 
     /**

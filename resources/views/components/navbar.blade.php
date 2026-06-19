@@ -9,11 +9,11 @@
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
-                        <x-my-nav-link href="/" :active="request()->is('/')">laravel</x-my-nav-link>
+                        <x-my-nav-link :href="'/'" :active="request()->is('/')">laravel</x-my-nav-link>
                         <x-my-nav-link :href="'/home'" :active="request()->is('home')">Home</x-my-nav-link>
-                        <x-my-nav-link href="/about" :active="request()->is('about ')">About</x-my-nav-link>
-                        <x-my-nav-link href="/contact" :active="request()->is('contact')">Contact</x-my-nav-link>
-                        <x-my-nav-link href="/blog" :active="request()->is('blog')">Blog</x-my-nav-link>
+                        <x-my-nav-link :href="'/about'" :active="request()->is('about ')">About</x-my-nav-link>
+                        <x-my-nav-link :href="'/contact'" :active="request()->is('contact')">Contact</x-my-nav-link>
+                        <x-my-nav-link :href="'/blog'" :active="request()->is('blog')">Blog</x-my-nav-link>
 
                     </div>
                 </div>
