@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class BlogDashboardController extends Controller
 
         $count = Post::where('author_id', '=', Auth::user()->id)->count();
 
-        return view('dashboard', ['posts' => $posts, 'count' => $count]);
+        return view('dashboard.index', ['posts' => $posts, 'count' => $count]);
     }
 
     /**
@@ -25,7 +26,8 @@ class BlogDashboardController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('dashboard.create', ['categories' => $categories]);
     }
 
     /**
@@ -39,9 +41,9 @@ class BlogDashboardController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Post $post)
     {
-        //
+        return view('dashboard.show', ['post' => $post]);
     }
 
     /**

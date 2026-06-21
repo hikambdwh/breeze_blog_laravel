@@ -49,6 +49,9 @@ Route::get('/blog/{post:slug}', function (Post $post) {
 
 Route::get('/dashboard', [BlogDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('dashboard/create', [BlogDashboardController::class, 'create'])->middleware(['auth', 'verified']);
+Route::get('dashboard/{post:slug}', [BlogDashboardController::class, 'show'])->middleware(['auth', 'verified']);
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
