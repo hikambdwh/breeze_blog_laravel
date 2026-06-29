@@ -1,58 +1,221 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Breeze Blog - Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Platform blogging sederhana dan elegan yang dibangun dengan Laravel dan Breeze.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- 📝 Sistem manajemen artikel/blog
+- 👤 Autentikasi pengguna dengan Laravel Breeze
+- 📁 Kategori untuk organisasi artikel
+- 🖼️ Avatar pengguna
+- 📱 Responsive design
+- 🔐 Autentikasi dan otorisasi
+- 📊 Dashboard pengguna
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Persyaratan Sistem
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Sebelum memulai, pastikan Anda memiliki:
 
-## Learning Laravel
+- **PHP** >= 8.2
+- **Composer** (untuk mengelola dependensi PHP)
+- **Node.js** >= 18 dan **npm** atau **yarn** (untuk aset frontend)
+- **Database**: MySQL, PostgreSQL, SQLite, atau SQL Server
+- **Git** (untuk clone repository)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Instalasi
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Clone Repository
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/yourusername/breeze_blog_laravel.git
+cd breeze_blog_laravel
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install Dependensi PHP
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Install Dependensi JavaScript
 
-## Code of Conduct
+```bash
+npm install
+# atau jika menggunakan yarn
+yarn install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Setup Konfigurasi Environment
 
-## Security Vulnerabilities
+Copy file `.env.example` ke `.env`:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+cp .env.example .env
+```
+
+Generate application key:
+
+```bash
+php artisan key:generate
+```
+
+### 5. Konfigurasi Database
+
+Edit file `.env` dan sesuaikan konfigurasi database Anda:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=breeze_blog
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 6. Jalankan Migrasi Database
+
+```bash
+php artisan migrate
+```
+
+### 7. Seed Database (Opsional)
+
+Untuk mengisi database dengan data dummy:
+
+```bash
+php artisan db:seed
+```
+
+### 8. Build Frontend Assets
+
+```bash
+npm run build
+# atau untuk development dengan hot reload
+npm run dev
+```
+
+## Menjalankan Aplikasi
+
+### Opsi 1: Menggunakan Artisan Server
+
+```bash
+php artisan serve
+```
+
+Aplikasi akan berjalan di `http://localhost:8000`
+
+### Opsi 2: Menggunakan Laravel Valet (Recommended untuk macOS/Linux)
+
+```bash
+valet link
+valet open
+```
+
+## Development
+
+Untuk development dengan hot reload:
+
+```bash
+npm run dev
+```
+
+Di terminal lain, jalankan Laravel server:
+
+```bash
+php artisan serve
+```
+
+## Testing
+
+Jalankan test suite menggunakan Pest:
+
+```bash
+php artisan test
+```
+
+Dengan coverage:
+
+```bash
+php artisan test --coverage
+```
+
+## Struktur Folder
+
+```
+├── app/
+│   ├── Http/Controllers/      # Controller aplikasi
+│   ├── Models/               # Model Eloquent (User, Post, Category)
+│   └── Providers/            # Service Provider
+├── database/
+│   ├── migrations/           # Database migration files
+│   ├── seeders/              # Database seeder
+│   └── factories/            # Factory untuk testing
+├── resources/
+│   ├── views/                # Blade template views
+│   ├── js/                   # JavaScript files
+│   └── css/                  # CSS files
+├── routes/
+│   ├── web.php              # Web routes
+│   ├── auth.php             # Authentication routes (Breeze)
+│   └── console.php          # Console commands
+├── storage/                 # Penyimpanan file (logs, cache)
+└── tests/                   # Test files
+```
+
+## Fitur Utama
+
+### Autentikasi
+- Register dan Login dengan email
+- Password reset
+- Email verification
+- Profile management
+
+### Artikel/Blog
+- Create, Read, Update, Delete artikel
+- Kategorisasi artikel
+- Tampilkan artikel berdasarkan kategori
+- Search artikel
+
+### Pengguna
+- User profile dengan avatar
+- User management untuk admin
+- Role-based access control
+
+## Troubleshooting
+
+### Masalah Umum
+
+**Error: "No application encryption key has been specified"**
+```bash
+php artisan key:generate
+```
+
+**Database connection error**
+- Pastikan database sudah dibuat
+- Periksa konfigurasi `.env` file
+- Pastikan database server sedang berjalan
+
+**Permission denied pada folder storage**
+```bash
+chmod -R 775 storage bootstrap/cache
+```
+
+**Npm module tidak ditemukan**
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+## Kontribusi
+
+Kami menerima kontribusi! Silakan:
+
+1. Fork repository
+2. Buat feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push ke branch (`git push origin feature/AmazingFeature`)
+5. Buat Pull Request
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proyek ini dilisensikan di bawah MIT License. Lihat file [LICENSE](LICENSE) untuk detail lebih lanjut.
