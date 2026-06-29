@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\blogController;
 use App\Http\Controllers\BlogDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Category;
@@ -32,30 +33,28 @@ Route::get('/contact', function () {
         'nama' => 'Hikam'
     ]);
 });
-Route::get('/blog', function () {
-    $posts = Post::latest()->filter(request(['search', 'category', 'author']))->paginate(10)->withQueryString();
-    $categories = Category::all();
-
-    return view('blog', [
-        'title' => 'Blog',
-        'posts' => $posts,
-        'categories' => $categories
-    ]);
-});
+Route::get('/blog', [blogController::class, 'blog']);
 
 Route::get('/blog/{post:slug}', function (Post $post) {
     return view('artikel', ['title' => 'Artikel', 'post' => $post]);
 });
 
-Route::get('/dashboard', [BlogDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [BlogDashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard', [BlogDashboardController::class, 'store'])->name('addpost');
+    Route::get('/dashboard/create', [BlogDashboardController::class, 'create']);
+    Route::delete('/dashboard/{post:slug}', [BlogDashboardController::class, 'destroy']);
+    Route::get('/dashboard/{post:slug}/edit', [BlogDashboardController::class, 'edit']);
+    Route::patch('/dashboard/{post:slug}', [BlogDashboardController::class, 'update']);
+    Route::get('/dashboard/{post:slug}', [BlogDashboardController::class, 'show']);
+});
 
-Route::get('dashboard/create', [BlogDashboardController::class, 'create'])->middleware(['auth', 'verified']);
-Route::get('dashboard/{post:slug}', [BlogDashboardController::class, 'show'])->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/upload', [ProfileController::class, 'upload']);
 });
 
 require __DIR__.'/auth.php';

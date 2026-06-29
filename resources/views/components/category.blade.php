@@ -18,7 +18,7 @@
             <input type="search" id="search"
                 class="block w-[800px] p-3 ps-9 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
                 placeholder="Search" required name="search" />
-            <button type="submit"
+            <button type="submit"       
                 class="absolute end-1.5 bottom-1.5 text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded text-xs px-3 py-1.5 focus:outline-none">Search</button>
         </div>
     </form>

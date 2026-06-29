@@ -5,16 +5,11 @@
         </h2>
     </x-slot>
 
-    @if (Session::has('success'))
-    <x-toast :text="Session::get('success')"/>
-    @endif
-
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-
-                    <x-post.table :posts="$posts" :count="$count" />
+                    <x-post.editForm :post="$post" :categories="$categories"/>
                 </div>
             </div>
         </div>

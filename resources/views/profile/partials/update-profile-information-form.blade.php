@@ -1,3 +1,7 @@
+@push('styles')
+    <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+@endpush
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
@@ -13,58 +17,111 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6 grid lg:grid-cols-2 gap-80"
+        enctype="multipart/form-data">
         @csrf
         @method('patch')
-
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
-        </div>
+            <div>
+                <x-input-label for="name" :value="__('Name')" />
+                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
+                    required autofocus autocomplete="name" />
+                <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            </div>
 
-        <div>
-            <x-input-label for="username" :value="__('Username')" />
-            <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->username)" required autofocus autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('username')" />
-        </div>
+            <div class="mt-3">
+                <x-input-label for="username" :value="__('Username')" />
+                <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->username)"
+                    required autofocus autocomplete="username" />
+                <x-input-error class="mt-2" :messages="$errors->get('username')" />
+            </div>
 
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <div class="mt-3">
+                <x-input-label for="email" :value="__('Email')" />
+                <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)"
+                    required autocomplete="username" />
+                <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
+                @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
+                    <div>
+                        <p class="text-sm mt-2 text-gray-800">
+                            {{ __('Your email address is unverified.') }}
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
+                            <button form="send-verification"
+                                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                {{ __('Click here to re-send the verification email.') }}
+                            </button>
                         </p>
-                    @endif
-                </div>
-            @endif
+
+                        @if (session('status') === 'verification-link-sent')
+                            <p class="mt-2 font-medium text-sm text-green-600">
+                                {{ __('A new verification link has been sent to your email address.') }}
+                            </p>
+                        @endif
+                    </div>
+                @endif
+            </div>
+            <div class="flex items-center gap-4 mt-4">
+                <x-primary-button>{{ __('Save') }}</x-primary-button>
+
+                @if (session('status') === 'profile-updated')
+                    <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                        class="text-sm text-gray-600">{{ __('Saved.') }}</p>
+                @endif
+            </div>
         </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
-
-            @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
-            @endif
+        <div>
+            <img class="w-42 h-42 rounded-full mx-auto"
+                src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : '/img/avatar-default.png' }}"
+                alt="Rounded avatar">
+            <label class="block mb-2.5 text-sm font-medium text-heading" for="avatar">Upload file</label>
+            <input
+                class="@error('avatar') bg-red-50 text-red-700 focus:ring-red-600 focus:border-red-500 @enderror cursor-pointer bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full shadow-xs placeholder:text-body"
+                aria-describedby="avatar_help" id="avatar" type="file" name="avatar"
+                accept="image/png, image/jpg, image/jpeg">
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="avatar_help">PNG, JPG.</p>
+            @error('avatar')
+                <div class="text-xs text-red-500 mt-1">{{ $message }}</div>
+            @enderror
         </div>
+
     </form>
 </section>
+
+@push('scripts')
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js"></script>
+
+
+    <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+    <script>
+        FilePond.registerPlugin(FilePondPluginImagePreview);
+        FilePond.registerPlugin(FilePondPluginFileValidateType);
+        FilePond.registerPlugin(FilePondPluginFileValidateSize);
+        FilePond.registerPlugin(FilePondPluginImageTransform);
+        FilePond.registerPlugin(FilePondPluginImageResize);
+
+
+        // filepond initialization
+        const inputElement = document.querySelector('#avatar');
+        const pond = FilePond.create(inputElement, {
+            acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
+            maxFileSize: '2MB',
+            labelMaxFileSizeExceeded: 'Ukuran file terlalu besar',
+            labelMaxFileSize: 'Ukuran maksimal file sebesar {filesize}',
+            imageResizeTargetWidth: '600',
+            imageResizeMode: 'contain',
+            imageResizeUpscale: false,
+            server: {
+                url: '/upload',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            }
+        });
+    </script>
+@endpush

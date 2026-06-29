@@ -16,12 +16,12 @@
                         </div>
                         <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"><a
                                 href="/blog/{{ $post['slug'] }}">{{ $post->title }}</a></h2>
-                        <p class="mb-5 font-light text-gray-500 dark:text-gray-400">{{ Str::limit($post->content, 100) }}
-                        </p>
+                        <div class="mb-5 font-light text-gray-500 dark:text-gray-400">{!! Str::limit($post->content, 150) !!}
+                        </div>
                         <div>
                             <div class="flex items-center space-x-4">
                                 <img class="w-7 h-7 rounded-full"
-                                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
+                                    src="{{ $post->author->avatar ? asset('storage/' . $post->author->avatar) : '/img/avatar-default.png' }}"
                                     alt="Jese Leos avatar" />
                                 <a href="/blog?author={{ $post->author->username }}">
 
